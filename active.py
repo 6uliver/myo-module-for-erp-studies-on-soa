@@ -5,81 +5,46 @@
 #======================================================================
 
 from __future__ import division
-from psychopy import visual, core, event, gui, misc, sound
+from psychopy import core, event
 import time, random, cPickle, codecs, os, copy, math, collections
 from psychopy import parallel, monitors
 from view import View
 from eegsignal import Signal
 
 signal = Signal(0x378)
-
-#Azok az adatok, amiket a program indításkor bekér:
-expstart1=gui.Dlg(title=u'A projekt adatai - AKTÍV')
-expstart1.addText('')
-expstart1.addField(u'Kísérleti személy sorszáma','')
-expstart1.addField(u'Neme', choices=[u"Válassz!",u"férfi", u"nő"])
-expstart1.addField(u'Kéz', choices=[u"Válassz!",u"jobb", u"bal"])
-expstart1.show()
-if not expstart1.OK:
-    core.quit()
-if expstart1.data[1] == u"Válassz!":
-    expstart2 = gui.Dlg (title = u'ERROR')
-    expstart2.addText(u'A résztvevő neme ismeretlen!')
-    expstart2.show()
-    if expstart2.OK:
-        core.quit()
-elif expstart1.data[2] == u"Válassz!":
-    expstart3 = gui.Dlg (title = u'ERROR')
-    expstart3.addText(u'Válassz kezet!')
-    expstart3.show()
-    if expstart3.OK:
-        core.quit()
-else:
-    sorszam=expstart1.data[0]
-    nem=expstart1.data[1]
-    kez=expstart1.data[2]
-
-if nem == u"férfi":
-    male = True
-else:
-    male = False
-
-if kez == u"jobb":
-    right = True
-else:
-    right = False
-
-#LOGFILE-OK
-try:
-    output_file = codecs.open(sorszam +'_HandMYO_aktiv_'+ nem + '_'+kez+'.txt', 'r',encoding='utf-8')
-except IOError:
-    #letezo=0
-    print 'még nincs elmentve ilyen fájl, valószínűleg ez az első alkalom az indítások közül'
-    #Ha a progi először indul, létrehozatjuk vele a 3 logfile-t
-    output_file = codecs.open(sorszam +'_HandMYO_aktiv_'+ nem + '_'+kez+'.txt','a', encoding = 'utf-8')  #a személy válaszai
-
-else:
-    #letezo=1
-    expstart4 = gui.Dlg (title = u'ERROR')
-    expstart4.addText(u'Létező beállítások ennél a személynél!\nAz adott sorszámú személynél korábban már elindult ez a blokk. Ha a blokkot újra kell kezdeni ennél a személynél, töröld ki a személy adott blokkjához tartozó .txt fájlt a scriptet tartalmazó mappából.')
-    expstart4.show()
-    if expstart4.OK:
-        core.quit()
-
 view = View()
 
-view.setHands(male, right)
+personData = View.collectPersonData()
+
+male = (personData['nem'] == u"férfi")
+right = (personData['kez'] == u"jobb")
 
 if right:
     pinNumber = 2#choose a pin to write to (2-9).
 else:
     pinNumber = 3#choose a pin to write to (2-9).
 
+view.setHands(male, right)
+
+filename = personData['sorszam'] +'_HandMYO_aktiv_'+ personData['nem'] + '_'+personData['kez']+'.txt'
+
+#LOGFILE-OK
+try:
+    output_file = codecs.open(filename, 'r',encoding='utf-8')
+except IOError:
+    #letezo=0
+    print 'még nincs elmentve ilyen fájl, valószínűleg ez az első alkalom az indítások közül'
+    #Ha a progi először indul, létrehozatjuk vele a 3 logfile-t
+    output_file = codecs.open(filename,'a', encoding = 'utf-8')  #a személy válaszai
+else:
+    #letezo=1
+    View.showErrorAndQuit(u'Létező beállítások ennél a személynél!\nAz adott sorszámú személynél korábban már elindult ez a blokk. Ha a blokkot újra kell kezdeni ennél a személynél, töröld ki a személy adott blokkjához tartozó .txt fájlt a scriptet tartalmazó mappából.')
+
 framerate_ms = view.measureFrameRate()
 print framerate_ms
 
-RT = core.Clock()
-stimulus_ido = core.Clock()
+measurementClock = core.Clock()
+test_clock = core.Clock()
 
 positions = [(-10, 7), (0, 7),(10,7),(10,0),(10,-7),(0,-7),(-10,-7), (-10,0)]
 random.shuffle(positions)
@@ -96,7 +61,7 @@ gyak_trialszam = 15
 signal.reset()
 while True:
     event.clearEvents(eventType='keyboard')
-    RT.reset()
+    measurementClock.reset()
 
     while True:  #equal 1 in case of answer
         view.drawFixation()
@@ -105,21 +70,21 @@ while True:
         while True:
             v = event.getKeys(keyList=['space', 'escape'])
             if v != []:
-                RI = RT.getTime()
+                waitTime = measurementClock.getTime()
                 break
             view.drawFixation()
 
         if v:
-            print str(RI)
-            feedback = str(round(RI, 2)) + ' mp'
+            print str(waitTime)
+            feedback = str(round(waitTime, 2)) + ' mp'
             if v[-1] == 'space':
-                signal.triggerPeak()
-                stimulus_ido.reset()
+                signal.triggerPeak(pinNumber)
+                test_clock.reset()
                 for st in range (stimulus_interval):
                     view.drawHand()
-                st_time = stimulus_ido.getTime()
+                st_time = test_clock.getTime()
                 print st_time
-                if RI > 1.75:
+                if waitTime > 1.75:
                     jovalasz +=1
                     for st2 in range (60):
                         view.drawCenterText(feedback)
@@ -162,7 +127,7 @@ for i in range (trialszam):
                 print 'Session terminated by user.'
                 core.quit()
             elif v[-1] == 'space':
-                signal.triggerPeak()
+                signal.triggerPeak(pinNumber)
                 for st2 in range (stimulus_interval):
                     view.drawHand()
             break

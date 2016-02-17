@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from psychopy import visual, core, event
+from psychopy import visual, core, event, gui
 import collections
 
 
@@ -129,3 +129,41 @@ class View():
         self.centerText.setText(text)
         self.centerText.draw()
         self.win.flip()
+
+    @staticmethod
+    def collectPersonData():
+        #Azok az adatok, amiket a program indításkor bekér:
+        expstart1=gui.Dlg(title=u'A projekt adatai - AKTÍV')
+        expstart1.addText('')
+        expstart1.addField(u'Kísérleti személy sorszáma','')
+        expstart1.addField(u'Neme', choices=[u"Válassz!",u"férfi", u"nő"])
+        expstart1.addField(u'Kéz', choices=[u"Válassz!",u"jobb", u"bal"])
+        expstart1.show()
+        if not expstart1.OK:
+            core.quit()
+        if expstart1.data[1] == u"Válassz!":
+            expstart2 = gui.Dlg (title = u'ERROR')
+            expstart2.addText(u'A résztvevő neme ismeretlen!')
+            expstart2.show()
+            if expstart2.OK:
+                core.quit()
+        elif expstart1.data[2] == u"Válassz!":
+            expstart3 = gui.Dlg (title = u'ERROR')
+            expstart3.addText(u'Válassz kezet!')
+            expstart3.show()
+            if expstart3.OK:
+                core.quit()
+
+        return {
+            'sorszam': expstart1.data[0],
+            'nem': expstart1.data[1],
+            'kez': expstart1.data[2]
+        }
+
+    @staticmethod
+    def collectPersonData(text):
+        expstart4 = gui.Dlg (title = u'ERROR')
+        expstart4.addText(text)
+        expstart4.show()
+        if expstart4.OK:
+            core.quit()
