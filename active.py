@@ -9,9 +9,9 @@ from psychopy import visual, core, event, gui, misc, sound
 import time, random, cPickle, codecs, os, copy, math, collections
 from psychopy import parallel, monitors
 from view import View
+from eegsignal import Signal
 
-parallel.setPortAddress(0x378)#address for parallel port on many machines
-
+signal = Signal(0x378)
 
 #Azok az adatok, amiket a program indításkor bekér:
 expstart1=gui.Dlg(title=u'A projekt adatai - AKTÍV')
@@ -66,33 +66,14 @@ else:
     if expstart4.OK:
         core.quit()
 
-myWin = visual.Window([1366,768],monitor="testMonitor", color = 'Black', allowGUI = True, units = 'cm',  waitBlanking=True, fullscr= True)
+view = View()
 
-view = View(myWin)
+view.setHands(male, right)
 
-if male:
-    if right:
-        hand = visual.ImageStim(myWin, 'images/m_right_1.png', pos = (0,0))
-        hand_get = visual.ImageStim(myWin, 'images/m_right_2.png', pos = (0,0))
-        pinNumber = 2#choose a pin to write to (2-9).
-    else:
-        hand = visual.ImageStim(myWin, 'images/m_left_1.png', pos = (0,0))
-        hand_get = visual.ImageStim(myWin, 'images/m_left_2.png', pos = (0,0))
-        pinNumber = 3#choose a pin to write to (2-9).
+if right:
+    pinNumber = 2#choose a pin to write to (2-9).
 else:
-    if right:
-        hand = visual.ImageStim(myWin, 'images/f_right_1.png', pos = (0,0))
-        hand_get = visual.ImageStim(myWin, 'images/f_right_2.png', pos = (0,0))
-        pinNumber = 2#choose a pin to write to (2-9).
-    else:
-        hand = visual.ImageStim(myWin, 'images/f_left_1.png', pos = (0,0))
-        hand_get = visual.ImageStim(myWin, 'images/f_left_2.png', pos = (0,0))
-        pinNumber = 3#choose a pin to write to (2-9).
-
-hand.size /= 5.75
-hand_get.size /= 5.75
-
-view.addHands(hand, hand_get)
+    pinNumber = 3#choose a pin to write to (2-9).
 
 framerate_ms = view.measureFrameRate()
 print framerate_ms
@@ -112,14 +93,14 @@ ACC = 0
 jovalasz = 0
 gyakblokk =0
 gyak_trialszam = 15
-##for k in range(20):
-##    parallel.setData(0) #TRIGGER!
+signal.reset()
 while True:
     event.clearEvents(eventType='keyboard')
     RT.reset()
-    a = 0
-    while a == 0:  #equal 1 in case of answer
+
+    while True:  #equal 1 in case of answer
         view.drawFixation()
+
         v=[]
         while True:
             v = event.getKeys(keyList=['space', 'escape'])
@@ -127,14 +108,12 @@ while True:
                 RI = RT.getTime()
                 break
             view.drawFixation()
+
         if v:
             print str(RI)
             feedback = str(round(RI, 2)) + ' mp'
             if v[-1] == 'space':
-##                for k in range(20):
-##                    parallel.setPin(pinNumber,1)
-##                for k in range(20):
-##                    parallel.setData(0) #TRIGGER!
+                signal.triggerPeak()
                 stimulus_ido.reset()
                 for st in range (stimulus_interval):
                     view.drawHand()
@@ -151,12 +130,14 @@ while True:
                 print 'Session terminated by user.'
                 core.quit()
 
-            a = 1
-    print 'jovalasz: ',jovalasz
+            break
+
     gyakblokk +=1
-    print gyak_trialszam*gyakblokk
+    osszesValasz = gyak_trialszam*gyakblokk
+    print 'jovalasz: ',jovalasz
+    print osszesValasz
     jovalasz = float(jovalasz)
-    ACC = float(jovalasz/(gyak_trialszam*gyakblokk)*100)
+    ACC = float(jovalasz/(osszesValasz)*100)
     if ACC>=80: #15
         break
 
@@ -177,16 +158,13 @@ for i in range (trialszam):
         v=[]
         v = event.getKeys(keyList=['space', 'escape'])
         if v:
-            if v[-1] == 'space':
-#                for k in range(20):
-#                    parallel.setPin(pinNumber,1) #TRIGGER be!
-#                for k in range(20):
-#                    parallel.setData(0) #TRIGGER ki!
-                for st2 in range (stimulus_interval):
-                    view.drawHand()
-            elif v[-1] == 'escape':
+            if v[-1] == 'escape':
                 print 'Session terminated by user.'
                 core.quit()
+            elif v[-1] == 'space':
+                signal.triggerPeak()
+                for st2 in range (stimulus_interval):
+                    view.drawHand()
             break
 
     if (i+1) == 15 or (i+1) == 36 or (i+1) == 57 or (i+1) == 78:
