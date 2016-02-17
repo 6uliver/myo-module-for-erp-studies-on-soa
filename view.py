@@ -131,9 +131,9 @@ class View():
         self.win.flip()
 
     @staticmethod
-    def collectPersonData():
+    def collectPersonData(type):
         #Azok az adatok, amiket a program indításkor bekér:
-        expstart1=gui.Dlg(title=u'A projekt adatai - AKTÍV')
+        expstart1=gui.Dlg(title=u'A projekt adatai - ' + type)
         expstart1.addText('')
         expstart1.addField(u'Kísérleti személy sorszáma','')
         expstart1.addField(u'Neme', choices=[u"Válassz!",u"férfi", u"nő"])
@@ -161,7 +161,7 @@ class View():
         }
 
     @staticmethod
-    def collectPersonData(text):
+    def showErrorAndQuit(text):
         expstart4 = gui.Dlg (title = u'ERROR')
         expstart4.addText(text)
         expstart4.show()

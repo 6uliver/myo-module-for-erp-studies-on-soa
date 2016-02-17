@@ -118,7 +118,8 @@ while True:
         elif v[-1] == 'escape':
             core.quit()
 
-#GYAKORLÁS
+# GYAKORLÁS
+# ugyanaz, mint az aktív gyakorlás, csak sosincs kéz
 ACC = 0
 jovalasz = 0
 z = 0
@@ -149,6 +150,7 @@ while z ==0:
 #                        parallel.setPin(pinNumber,1) #TRIGGER be!
 #                    for k in range(20):
 #                        parallel.setData(0) #TRIGGER ki!
+# !!! nincs drawHand
                     if RI > 1.75:
                         jovalasz +=1
                         for st2 in range (60):
@@ -186,7 +188,7 @@ while not tovabb[0] == 'space':
 
 
 
-
+# ugyanaz, mint az aktívnál, csak nincs kéz
 #fixációs kereszt amíg meg nem nyom egy gombot
 #ingerbemutatás x ideig
 trialszam = 100
@@ -221,6 +223,7 @@ for i in range (trialszam):
     print 'ujszam: ',ujszam
     if (i+1) == ujszam:
         random.shuffle(positions)
+        # indukcio, ugyanaz
         for i in range (8):
             b =0
             while b == 0:

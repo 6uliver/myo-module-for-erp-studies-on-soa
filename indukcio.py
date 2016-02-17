@@ -52,7 +52,6 @@ except IOError:
     #Ha a progi először indul, létrehozatjuk vele a 3 logfile-t 
     output_file = codecs.open(sorszam +'_HandMYO_indukcio_'+ nem +'.csv','a', encoding = 'utf-8')  #a személy válaszai
     output_file.write('sorszam' + ';' + 'nem' + ';' + 'kez' + ';' + 'trialszam'+';'+'session'+';'+'kez_hasonlo'+';'+'kez_sajat'+'\n')
-
 else: 
     #letezo=1
     output_file = codecs.open(sorszam +'_HandMYO_indukcio_'+ nem + '.csv','a', encoding = 'utf-8')
@@ -135,6 +134,8 @@ while True:
         elif v[-1] == 'escape':
             core.quit()
 
+# TODO controller.induction
+# sima indukció
 for i in range (trialszam):
     b =0
     while b == 0:

@@ -10,11 +10,17 @@ import time, random, cPickle, codecs, os, copy, math, collections
 from psychopy import parallel, monitors
 from view import View
 from eegsignal import Signal
+from dataCollector import DataCollector
+from controller import Controller
 
 signal = Signal(0x378)
-view = View()
 
-personData = View.collectPersonData()
+# signal.disable()
+
+view = View()
+controller = Controller(view)
+
+personData = View.collectPersonData('AKTÍV')
 
 male = (personData['nem'] == u"férfi")
 right = (personData['kez'] == u"jobb")
@@ -26,18 +32,9 @@ else:
 
 view.setHands(male, right)
 
-filename = personData['sorszam'] +'_HandMYO_aktiv_'+ personData['nem'] + '_'+personData['kez']+'.txt'
+dataCollector = DataCollector(personData['sorszam'],  personData['nem'],  personData['kez'])
 
-#LOGFILE-OK
-try:
-    output_file = codecs.open(filename, 'r',encoding='utf-8')
-except IOError:
-    #letezo=0
-    print 'még nincs elmentve ilyen fájl, valószínűleg ez az első alkalom az indítások közül'
-    #Ha a progi először indul, létrehozatjuk vele a 3 logfile-t
-    output_file = codecs.open(filename,'a', encoding = 'utf-8')  #a személy válaszai
-else:
-    #letezo=1
+if not dataCollector.openFile():
     View.showErrorAndQuit(u'Létező beállítások ennél a személynél!\nAz adott sorszámú személynél korábban már elindult ez a blokk. Ha a blokkot újra kell kezdeni ennél a személynél, töröld ki a személy adott blokkjához tartozó .txt fájlt a scriptet tartalmazó mappából.')
 
 framerate_ms = view.measureFrameRate()
@@ -54,6 +51,7 @@ stimulus_interval = int(round(300 / framerate_ms, 0))
 view.continueScreen(u'Üdvözlő képernyő')
 
 ##GYAKORLÁS - Myo
+## ugyanaz mint a következő, csak kap visszajelzést, mér és csak akkor enged tovább, ha elér egy szintet, nincs indukció
 ACC = 0
 jovalasz = 0
 gyakblokk =0
@@ -78,7 +76,8 @@ while True:
             print str(waitTime)
             feedback = str(round(waitTime, 2)) + ' mp'
             if v[-1] == 'space':
-                signal.triggerPeak(pinNumber)
+                # TODO kell-e?
+                # signal.triggerPeak(pinNumber)
                 test_clock.reset()
                 for st in range (stimulus_interval):
                     view.drawHand()
@@ -110,6 +109,8 @@ view.continueScreen(u'Vége a gyakorlásnak', u'Ha készen áll, nyomja meg a SP
 
 #fixációs kereszt amíg meg nem nyom egy gombot
 #ingerbemutatás x ideig
+
+# megnyomja, trigger és rögtön kéz, néha indukció
 trialszam = 100
 lista = [0, 1, 2, 3, 4, 5, 6]
 ujszam = -1
@@ -139,33 +140,6 @@ for i in range (trialszam):
     print 'ujszam: ',ujszam
     if (i+1) == ujszam:
         random.shuffle(positions)
-        for i in range (8):
-            while True:
-                view.drawHandAndStimulus(False, positions[i])
-
-                v = event.waitKeys()
-                if v:
-                    canGet = False
-                    if v[-1] == 'up':
-                        view.moveHand((0, 1))
-                    elif v[-1] == 'down':
-                        view.moveHand((0, -1))
-                    elif v[-1] == 'right':
-                        view.moveHand((1, 0))
-                    elif v[-1] == 'left':
-                        view.moveHand((-1, 0))
-                    elif v[-1] == 'escape':
-                        core.quit()
-                    elif view.isHandCanGetStimulus() and v[-1] == 'space':
-                        view.setHandGetPosition()
-                        canGet = True
-
-                    view.drawHandAndStimulus(canGet)
-                    if canGet:
-                        core.wait(0.8)
-                        view.resetHandPosition()
-                        break
-
-        view.continueScreen(u'Most pihenhet egy kicsit.', u'Ha készen áll a folytatásra, nyomja meg a SPACE billentyűt.')
+        controller.induction(positions)
 
 view.continueScreen(u'Vége')
