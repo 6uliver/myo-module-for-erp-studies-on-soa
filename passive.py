@@ -35,7 +35,11 @@ size = [1366, 768]
 view = View(size)
 controller = Controller(view)
 
+view.quit = controller.quit
+
 view.setHands(male, right)
+
+controller.measureThresholds(False, True)
 
 framerate_ms = view.measureFrameRate()
 print framerate_ms
@@ -97,4 +101,5 @@ for i in range (trialszam):
         controller.induction(positions)
 
 view.continueScreen(u'Vége')
-    
+
+controller.quit()

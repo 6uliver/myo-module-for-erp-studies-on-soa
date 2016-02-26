@@ -37,7 +37,11 @@ size = [1366, 768]
 view = View(size)
 controller = Controller(view)
 
+view.quit = controller.quit
+
 view.setHands(male, right)
+
+controller.measureThresholds()
 
 RT = core.Clock()
 st_ido = core.Clock()
@@ -124,3 +128,5 @@ for i in range (trialszam):
         view.continueScreen(u'Most pihenhet egy kicsit.', u'Ha készen áll a folytatásra, nyomja meg a SPACE billentyűt.')
 
 view.continueScreen(u'Vége')
+
+controller.quit()

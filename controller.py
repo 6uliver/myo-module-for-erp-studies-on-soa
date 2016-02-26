@@ -6,11 +6,17 @@ import math
 from myo import *
 from Queue import Queue
 
+def avg(list):
+    return sum(list) / len(list)
+
 class Controller():
 
     def __init__(self, view):
         self.view = view
         self.count = 0
+        self.restThreshold = 1000
+        self.activeThreshold = 1000
+        self.rest = True
         self.positionQueue = Queue()
         self.intensityQueue = Queue()
         self.emgHistory = []
@@ -18,7 +24,7 @@ class Controller():
         self.mouse.onPosition(self.onPosition)
         self.myoHub = Myo()
         self.myoHub.onConnected(self.onConnected)
-
+        
     def quit(self):
         self.myoHub.close()
         core.quit()
@@ -34,7 +40,13 @@ class Controller():
     def isGesture(self):
         intensity = self.intensityQueue.get(True)
         self.view.drawIntensity(int(intensity))
-        return intensity > 15
+        if intensity > self.restThreshold:
+            if self.rest:
+                self.rest = False
+                return True
+        elif intensity < self.restThreshold/2:
+            self.rest = True
+        return False
 
     def drawIntensity(self):
         intensity = self.intensityQueue.get(True)
@@ -77,13 +89,48 @@ class Controller():
         #intensity = max(rmsList)
         if self.intensityQueue.empty():
             self.intensityQueue.put(intensity)
+            
+    def measureThresholds(self, rest=True, active=True):
+        if rest:
+            self.view.continueScreen(u'Kalibrálás', u'Nyugalmi helyzetben')
+            self.restThreshold = self.measure()
+        if active:
+            self.view.continueScreen(u'Kalibrálás', u'Felemelt helyzetben')
+            self.activeThreshold = self.measure()
+            
+    def measure(self, count=3):
+        below = []
+        above = []
+        for j in range (count*2):
+            get = (j % 2) == 0
+            if get:
+                self.view.drawHandGet()
+            else:
+                self.view.drawHand()
+            while True:
+                intensity = self.intensityQueue.get(True)
+           
+                k = event.getKeys(keyList=['escape', 'space'])
+                if k:
+                    if k[-1] == 'escape':
+                        self.quit()
+                    elif k[-1] == 'space':
+                        if get:
+                            above.append(intensity)
+                        else:
+                            below.append(intensity)
+                        break
+        print below, above
+        print avg(below), avg(above)
+        print (avg(below) + avg(above))/2
+        return (avg(below) + avg(above))/2
 
     def induction(self, positions, count=8):
         for j in range (count):
             while True:
                 intensity = self.intensityQueue.get(True)
 
-                catch = intensity > 25
+                catch = intensity > self.activeThreshold
 
                 #print intensity
 
@@ -106,6 +153,7 @@ class Controller():
                 k = event.getKeys(keyList='escape')
                 if k and k[-1] == 'escape':
                     self.quit()
+        self.view.resetHandPosition()
 
 
         self.view.continueScreen(u'Most pihenhet egy kicsit.', u'Ha készen áll a folytatásra, nyomja meg a SPACE billentyűt.')

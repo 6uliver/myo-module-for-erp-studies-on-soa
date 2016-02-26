@@ -70,6 +70,10 @@ class View():
 
         return rating_HASONLO, rating_SAJAT
 
+    def drawHandGet(self):
+        self.hand_get.draw()
+        self.win.flip()
+
     def drawHand(self):
         self.hand.draw()
         self.win.flip()
