@@ -32,8 +32,10 @@ if not dataCollector.openFile():
 
 size = [1366, 768]
 
-view = View(size)
+view = View(size, True)
 controller = Controller(view)
+
+view.quit = controller.quit
 
 view.setHands(male, right)
 
@@ -51,7 +53,7 @@ random.shuffle(positions_ALL)
 
 view.continueScreen(u'Üdvözlő képernyő')
 
-controller.induction(positions_ALL)
+controller.induction(positions_ALL, trialszam)
 
 #CSÚSZKA
 rating_HASONLO, rating_SAJAT = view.getRating()
@@ -59,3 +61,5 @@ print 'rating_HASONLO: ', rating_HASONLO, ',rating_SAJAT: ', rating_SAJAT
 dataCollector.write(personData['sorszam'], personData['nem'], personData['kez'], trialszam, session, rating_HASONLO, rating_SAJAT)
 
 view.continueScreen(u'Vége')
+
+controller.quit()

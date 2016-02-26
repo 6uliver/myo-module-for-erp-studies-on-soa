@@ -6,10 +6,10 @@ import collections
 
 
 class View():
-    def __init__(self, size):
+    def __init__(self, size, fullscreen=False):
         self.size = size
         self.win = visual.Window(size, monitor="testMonitor", color='Black', allowGUI=True, units='cm',
-                                     waitBlanking=True, fullscr=False)
+                                     waitBlanking=True, fullscr=fullscreen)
         self.frametest = visual.TextStim(self.win, text=u'Indítás...', alignHoriz='center', alignVert='center',
                                          pos=(0.0, 0.0), color='silver', opacity=0.6, height=0.8, units='cm')
         self.fixation = visual.TextStim(self.win, text='+', alignHoriz='center', alignVert='center', pos=(0.0, 0.0),
@@ -56,13 +56,13 @@ class View():
     def getRating(self):
         self.setHandPosition((0, 2))
         while self.rateHAS_scale.noResponse:
-            self.drawHand()
+            self.hand.draw()
             self.rateHAS_text.draw()
             self.rateHAS_scale.draw()
             self.win.flip()
         rating_HASONLO = self.rateHAS_scale.getRating()
         while self.rateSAJAT_scale.noResponse:
-            self.drawHand()
+            self.hand.draw()
             self.rateSAJAT_text.draw()
             self.rateSAJAT_scale.draw()
             self.win.flip()
@@ -153,10 +153,9 @@ class View():
 
     def continueScreen(self, top, middle=u''):
         self.setInstructions(top, middle)
-        event.waitKeys(keyList=['space', 'escape'])
-        key = event.getKeys(keyList=['space', 'escape'])
+        key = event.waitKeys(keyList=['space', 'escape'])
         if key and (key[-1] == 'escape'):
-            core.quit()
+            self.quit()
 
     def drawCenterText(self, text):
         self.centerText.setText(text)
