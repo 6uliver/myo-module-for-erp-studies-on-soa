@@ -18,9 +18,9 @@ dataCollector = DataCollector()
 view = View()
 controller = Controller(view)
 
-personData = View.collectPersonData('PASSZÍV')
+personData = View.collectPersonData(u'PASSZÍV')
 
-dataCollector = DataCollector(personData['sorszam'],  personData['nem'],  personData['kez'])
+dataCollector = DataCollector('passziv', personData['sorszam'],  personData['nem'],  personData['kez'])
 
 if not dataCollector.openFile():
     View.showErrorAndQuit(u'Létező beállítások ennél a személynél!\nAz adott sorszámú személynél korábban már elindult ez a blokk. Ha a blokkot újra kell kezdeni ennél a személynél, töröld ki a személy adott blokkjához tartozó .txt fájlt a scriptet tartalmazó mappából.')

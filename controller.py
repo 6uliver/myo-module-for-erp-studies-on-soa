@@ -78,7 +78,6 @@ class Controller():
         if self.intensityQueue.empty():
             self.intensityQueue.put(intensity)
 
-    # TODO Myo
     def induction(self, positions, count=8):
         for j in range (count):
             while True:
