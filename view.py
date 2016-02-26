@@ -6,12 +6,10 @@ import collections
 
 
 class View():
-    def __init__(self, win=None):
-        if win != None:
-            self.win = win
-        else:
-            self.win = visual.Window([1366, 768], monitor="testMonitor", color='Black', allowGUI=True, units='cm',
-                                     waitBlanking=True, fullscr=True)
+    def __init__(self, size):
+        self.size = size
+        self.win = visual.Window(size, monitor="testMonitor", color='Black', allowGUI=True, units='cm',
+                                     waitBlanking=True, fullscr=False)
         self.frametest = visual.TextStim(self.win, text=u'Indítás...', alignHoriz='center', alignVert='center',
                                          pos=(0.0, 0.0), color='silver', opacity=0.6, height=0.8, units='cm')
         self.fixation = visual.TextStim(self.win, text='+', alignHoriz='center', alignVert='center', pos=(0.0, 0.0),
@@ -22,6 +20,11 @@ class View():
                                           color='white', height=0.5, units='cm', wrapWidth=27, font='courier new')
         self.centerText = visual.TextStim(self.win, text=u'', alignHoriz='center', alignVert='center', pos=(0.0, 0.0),
                                           color='white', height=1, units='cm', wrapWidth=27, font='courier new')
+        self.intensityText = visual.TextStim(self.win, text=u'', alignHoriz='center', alignVert='center', pos=(-10.0, -10.0),
+                                          color='white', height=1, units='cm', wrapWidth=27, font='courier new')
+
+    def getSize(self):
+        return self.size
 
     def addHands(self, hand, hand_get):
         self.hand = hand
@@ -42,12 +45,20 @@ class View():
         self.hand = visual.ImageStim(self.win, 'images/' + prefix + '_' + hand + '_1.png', pos=(0, 0))
         self.hand_get = visual.ImageStim(self.win, 'images/' + prefix + '_' + hand + '_2.png', pos=(0, 0))
 
-        self.hand.size /= 5.75
-        self.hand_get.size /= 5.75
+        self.hand.size /= 5.75*1.5
+        self.hand_get.size /= 5.75*1.5
 
     def drawHand(self):
         self.hand.draw()
         self.win.flip()
+
+    def drawIntensity(self, intensity):
+        self.intensityText.setText(intensity)
+        self.intensityText.draw()
+
+    def setHandPosition(self, position):
+        self.hand.pos = position
+        self.setHandGetPosition()
 
     def moveHand(self, offset):
         self.hand.pos += offset
@@ -76,21 +87,21 @@ class View():
             frametest.draw()
             self.win.flip()
             frrate = fr.getTime()
-            print frrate
+            #print frrate
             FRAMES.append(frrate)
 
         for i in range(len(FRAMES)):
             k = float(FRAMES[i])
             k = round(FRAMES[i], 4)
-            print k
+            #print k
             FRAMES[i] = k
 
-        print FRAMES
+        #print FRAMES
 
         counts = collections.Counter(FRAMES)
         new_list = sorted(FRAMES, key=counts.get, reverse=True)  # egyes frame-ek gyakoriság szerint sorbarendezve
 
-        print new_list
+        #print new_list
 
         framerate_ms = new_list[0] * 1000
         return framerate_ms
@@ -110,10 +121,10 @@ class View():
         self.win.flip()
 
     def isHandCanGetStimulus(self):
-        return self.hand.overlaps(self.stimulus) or self.hand.contains(self.stimulus.pos)
+        return self.stimulus.contains(self.hand.pos)#self.hand.overlaps(self.stimulus) or self.hand.contains(self.stimulus.pos)
 
     def setHandGetPosition(self):
-        self.hand_get.pos = self.hand.position
+        self.hand_get.pos = self.hand.pos
 
     def resetHandPosition(self):
         self.hand.pos = (0,0)

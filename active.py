@@ -17,10 +17,7 @@ signal = Signal(0x378)
 
 # signal.disable()
 
-view = View()
-controller = Controller(view)
-
-personData = View.collectPersonData('AKTÍV')
+personData = View.collectPersonData(u'AKTÍV')
 
 male = (personData['nem'] == u"férfi")
 right = (personData['kez'] == u"jobb")
@@ -30,12 +27,17 @@ if right:
 else:
     pinNumber = 3#choose a pin to write to (2-9).
 
-view.setHands(male, right)
-
 dataCollector = DataCollector(personData['sorszam'],  personData['nem'],  personData['kez'])
 
 if not dataCollector.openFile():
     View.showErrorAndQuit(u'Létező beállítások ennél a személynél!\nAz adott sorszámú személynél korábban már elindult ez a blokk. Ha a blokkot újra kell kezdeni ennél a személynél, töröld ki a személy adott blokkjához tartozó .txt fájlt a scriptet tartalmazó mappából.')
+
+size = [1366, 768]
+
+view = View(size)
+controller = Controller(view)
+
+view.setHands(male, right)
 
 framerate_ms = view.measureFrameRate()
 print framerate_ms
@@ -120,17 +122,12 @@ for i in range (trialszam):
     event.clearEvents(eventType='keyboard')
 
     while True:  #equal 1 in case of answer
+        controller.drawIntensity()
         view.drawFixation()
-        v=[]
-        v = event.getKeys(keyList=['space', 'escape'])
-        if v:
-            if v[-1] == 'escape':
-                print 'Session terminated by user.'
-                core.quit()
-            elif v[-1] == 'space':
-                signal.triggerPeak(pinNumber)
-                for st2 in range (stimulus_interval):
-                    view.drawHand()
+        if controller.isGesture():
+            signal.triggerPeak(pinNumber)
+            for st2 in range (stimulus_interval):
+                view.drawHand()
             break
 
     if (i+1) == 15 or (i+1) == 36 or (i+1) == 57 or (i+1) == 78:
