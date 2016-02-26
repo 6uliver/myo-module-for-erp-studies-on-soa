@@ -27,3 +27,6 @@ class DataCollector():
             return False
 
         return True
+
+    def write(self, sorszam, nem, kez, trialszam, session, rating_HASONLO, rating_SAJAT):
+        self.output_file.write(sorszam+';' + nem + ';' + kez + ';' + str(trialszam) + ';' + session + ';' + str(rating_HASONLO) + ';' + str(rating_SAJAT) + '\n')

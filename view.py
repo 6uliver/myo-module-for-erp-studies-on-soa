@@ -23,6 +23,11 @@ class View():
         self.intensityText = visual.TextStim(self.win, text=u'', alignHoriz='center', alignVert='center', pos=(-10.0, -10.0),
                                           color='white', height=1, units='cm', wrapWidth=27, font='courier new')
 
+        self.rateSAJAT_text = visual.TextStim(self.win, text = u'Mennyiére érzed magadnénak a képernyőn látható kezet? Értékeld az alábbi csúszka segítségével!', alignHoriz='center', alignVert='center',  pos = (-1, -6),wrapWidth = 25, color='white', height = 0.5, units = 'cm', font='courier new')
+        self.rateSAJAT_scale = visual.RatingScale(self.win, labels = [u"\nEgyáltalán nem érzem magamének", u"\nKözepesen érzem magaménak", u"\nTeljesen magaménak érzem"], textColor='LightGrey', marker='triangle', markerStart = 0, markerColor='dimgray', acceptPreText=u'értekeld!', acceptText=u'OK',textSize=0.7, scale=None, stretch = 2.40, low=-100, high=100, precision=1, showValue=False, lineColor='grey', pos = (0, -0.7))
+        self.rateHAS_text = visual.TextStim(self.win, text = u'Mennyiére érzed hasonlónak a képernyőn látható kezet a saját kezedhez képest?\nÉrtékeld az alábbi csúszka segítségével!', alignHoriz='center', alignVert='center',  pos = (-1, -6),wrapWidth = 25, color='white', height = 0.5, units = 'cm', font='courier new')
+        self.rateHAS_scale = visual.RatingScale(self.win, labels = [u"\nEgyáltalán nem érzem hasonlónak", u"\nKözepesen érzem hasonlónak", u"\nTeljesen hasonlónak érzem"], textColor='LightGrey', marker='triangle', markerStart = 0, markerColor='dimgray', acceptPreText=u'értekeld!', acceptText=u'OK',textSize=0.7, scale=None, stretch = 2.40, low=-100, high=100, precision=1, showValue=False, lineColor='grey', pos = (0, -0.7))
+
     def getSize(self):
         return self.size
 
@@ -47,6 +52,23 @@ class View():
 
         self.hand.size /= 5.75*1.5
         self.hand_get.size /= 5.75*1.5
+
+    def getRating(self):
+        self.setHandPosition((0, 2))
+        while self.rateHAS_scale.noResponse:
+            self.drawHand()
+            self.rateHAS_text.draw()
+            self.rateHAS_scale.draw()
+            self.win.flip()
+        rating_HASONLO = self.rateHAS_scale.getRating()
+        while self.rateSAJAT_scale.noResponse:
+            self.drawHand()
+            self.rateSAJAT_text.draw()
+            self.rateSAJAT_scale.draw()
+            self.win.flip()
+        rating_SAJAT = self.rateSAJAT_scale.getRating()
+
+        return rating_HASONLO, rating_SAJAT
 
     def drawHand(self):
         self.hand.draw()
@@ -142,13 +164,17 @@ class View():
         self.win.flip()
 
     @staticmethod
-    def collectPersonData(type):
+    def collectPersonData(type, trial=False):
         #Azok az adatok, amiket a program indításkor bekér:
         expstart1=gui.Dlg(title=u'A projekt adatai - ' + type)
         expstart1.addText('')
         expstart1.addField(u'Kísérleti személy sorszáma','')
         expstart1.addField(u'Neme', choices=[u"Válassz!",u"férfi", u"nő"])
         expstart1.addField(u'Kéz', choices=[u"Válassz!",u"jobb", u"bal"])
+        if trial:
+            expstart1.addText('')
+            expstart1.addField(u'Session','')
+            expstart1.addField(u'Trialszám','')
         expstart1.show()
         if not expstart1.OK:
             core.quit()
@@ -165,11 +191,17 @@ class View():
             if expstart3.OK:
                 core.quit()
 
-        return {
+        data =  {
             'sorszam': expstart1.data[0],
             'nem': expstart1.data[1],
             'kez': expstart1.data[2]
         }
+
+        if trial:
+            data['session'] = expstart1.data[3]
+            data['trialszam'] = int(expstart1.data[4])
+
+        return data
 
     @staticmethod
     def showErrorAndQuit(text):

@@ -14,9 +14,7 @@ from dataCollector import DataCollector
 from controller import Controller
 
 signal = Signal(0x378)
-dataCollector = DataCollector()
-view = View()
-controller = Controller(view)
+signal.disable()
 
 personData = View.collectPersonData(u'PASSZÍV')
 
@@ -32,6 +30,10 @@ if right:
     pinNumber = 2#choose a pin to write to (2-9).
 else:
     pinNumber = 3#choose a pin to write to (2-9).
+
+size = [1366, 768]
+view = View(size)
+controller = Controller(view)
 
 view.setHands(male, right)
 
