@@ -23,9 +23,9 @@ class View():
         self.intensityText = visual.TextStim(self.win, text=u'', alignHoriz='center', alignVert='center', pos=(-10.0, -10.0),
                                           color='white', height=1, units='cm', wrapWidth=27, font='courier new')
 
-        self.rateSAJAT_text = visual.TextStim(self.win, text = u'Mennyiére érzed magadnénak a képernyőn látható kezet? Értékeld az alábbi csúszka segítségével!', alignHoriz='center', alignVert='center',  pos = (-1, -6),wrapWidth = 25, color='white', height = 0.5, units = 'cm', font='courier new')
+        self.rateSAJAT_text = visual.TextStim(self.win, text = u'Mennyire érzed magadénak a képernyőn látható kezet? Értékeld az alábbi csúszka segítségével!', alignHoriz='center', alignVert='center',  pos = (-1, -6),wrapWidth = 25, color='white', height = 0.5, units = 'cm', font='courier new')
         self.rateSAJAT_scale = visual.RatingScale(self.win, labels = [u"\nEgyáltalán nem érzem magamének", u"\nKözepesen érzem magaménak", u"\nTeljesen magaménak érzem"], textColor='LightGrey', marker='triangle', markerStart = 0, markerColor='dimgray', acceptPreText=u'értekeld!', acceptText=u'OK',textSize=0.7, scale=None, stretch = 2.40, low=-100, high=100, precision=1, showValue=False, lineColor='grey', pos = (0, -0.7))
-        self.rateHAS_text = visual.TextStim(self.win, text = u'Mennyiére érzed hasonlónak a képernyőn látható kezet a saját kezedhez képest?\nÉrtékeld az alábbi csúszka segítségével!', alignHoriz='center', alignVert='center',  pos = (-1, -6),wrapWidth = 25, color='white', height = 0.5, units = 'cm', font='courier new')
+        self.rateHAS_text = visual.TextStim(self.win, text = u'Mennyire érzed hasonlónak a képernyőn látható kezet a saját kezedhez képest?\nÉrtékeld az alábbi csúszka segítségével!', alignHoriz='center', alignVert='center',  pos = (-1, -6),wrapWidth = 25, color='white', height = 0.5, units = 'cm', font='courier new')
         self.rateHAS_scale = visual.RatingScale(self.win, labels = [u"\nEgyáltalán nem érzem hasonlónak", u"\nKözepesen érzem hasonlónak", u"\nTeljesen hasonlónak érzem"], textColor='LightGrey', marker='triangle', markerStart = 0, markerColor='dimgray', acceptPreText=u'értekeld!', acceptText=u'OK',textSize=0.7, scale=None, stretch = 2.40, low=-100, high=100, precision=1, showValue=False, lineColor='grey', pos = (0, -0.7))
 
     def getSize(self):

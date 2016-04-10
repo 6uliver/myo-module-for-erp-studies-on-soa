@@ -79,18 +79,22 @@ random.shuffle(allISI)
 
 # valamikor trigger és rögtön kéz, néha indukció
 event.clearEvents(eventType='keyboard')
-v=[]
 for i in range (trialszam):
-    v = event.getKeys(keyList=['space', 'escape'])
-    if v:
-        if v[-1] == 'escape':
-            core.quit()
+    controller.checkQuit()
+
     # stimulus onset asynchronity
     for soa in range (allISI[i]):
+        controller.checkQuit()
         view.drawFixation()
     signal.triggerPeak(pinNumber)
+
+    controller.checkQuit()
+
     for st2 in range (st_int):
+        controller.checkQuit()
         view.drawHand()
+
+    controller.checkQuit()
     if (i+1) == 15 or (i+1) == 36 or (i+1) == 57 or (i+1) == 78:
         szam = random.choice(lista)
         print 'szam: ', szam

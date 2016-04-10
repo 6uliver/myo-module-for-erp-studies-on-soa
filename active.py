@@ -64,43 +64,40 @@ gyakblokk =0
 gyak_trialszam = 15
 signal.reset()
 while True:
-    event.clearEvents(eventType='keyboard')
-    measurementClock.reset()
+    for i in range (gyak_trialszam):
+        event.clearEvents(eventType='keyboard')
+        measurementClock.reset()
 
-    while True:  #equal 1 in case of answer
         view.drawFixation()
 
         v=[]
-        while True:
-            v = event.getKeys(keyList=['space', 'escape'])
-            if v != []:
+        while True:  #equal 1 in case of answer
+            controller.checkQuit()
+            controller.drawIntensity()
+            view.drawFixation()
+            if controller.isGesture():
                 waitTime = measurementClock.getTime()
                 break
-            view.drawFixation()
 
-        if v:
-            print str(waitTime)
-            feedback = str(round(waitTime, 2)) + ' mp'
-            if v[-1] == 'space':
-                # TODO kell-e?
-                # signal.triggerPeak(pinNumber)
-                test_clock.reset()
-                for st in range (stimulus_interval):
-                    view.drawHand()
-                st_time = test_clock.getTime()
-                print st_time
-                if waitTime > 1.75:
-                    jovalasz +=1
-                    for st2 in range (60):
-                        view.drawCenterText(feedback)
-                else:
-                    for st2 in range (60):
-                        view.drawCenterText(feedback)
-            elif v[-1] == 'escape':
-                print 'Session terminated by user.'
-                core.quit()
+        controller.checkQuit()
 
-            break
+        print str(waitTime)
+        feedback = str(round(waitTime, 2)) + ' mp'
+
+        # TODO kell-e?
+        # signal.triggerPeak(pinNumber)
+        test_clock.reset()
+        for st in range (stimulus_interval):
+            view.drawHand()
+        st_time = test_clock.getTime()
+        print st_time
+        if waitTime > 1.75:
+            jovalasz +=1
+            for st2 in range (60):
+                view.drawCenterText(feedback)
+        else:
+            for st2 in range (60):
+                view.drawCenterText(feedback)
 
     gyakblokk +=1
     osszesValasz = gyak_trialszam*gyakblokk
@@ -123,9 +120,9 @@ ujszam = -1
 for i in range (trialszam):
     view.drawFixation()
     core.wait(1.5)
-    event.clearEvents(eventType='keyboard')
 
     while True:  #equal 1 in case of answer
+        controller.checkQuit()
         controller.drawIntensity()
         view.drawFixation()
         if controller.isGesture():
@@ -133,6 +130,8 @@ for i in range (trialszam):
             for st2 in range (stimulus_interval):
                 view.drawHand()
             break
+
+    controller.checkQuit()
 
     if (i+1) == 15 or (i+1) == 36 or (i+1) == 57 or (i+1) == 78:
         szam = random.choice(lista)

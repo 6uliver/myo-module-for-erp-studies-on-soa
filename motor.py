@@ -57,47 +57,44 @@ view.continueScreen(u'Üdvözlő képernyő')
 # ugyanaz, mint az aktív gyakorlás, csak sosincs kéz
 ACC = 0
 jovalasz = 0
-z = 0
 gyakblokk =0
 gyak_trialszam = 15
-while z ==0:
+while True:
     for i in range (gyak_trialszam):
         event.clearEvents(eventType='keyboard')
         RT.reset()
-        a = 0
-        while a == 0:  #equal 1 in case of answer
-            view.drawFixation()
-            v=[]
-            while True:
-                v = event.getKeys(keyList=['space', 'escape'])
-                if v != []:
-                    RI = RT.getTime()
-                    break
-                view.drawFixation()
-            if v:
-                print str(RI)
-                feedback = str(round(RI, 2)) + ' mp'
 
-                if v[-1] == 'space':
-                    signal.triggerPeak(pinNumber)
-                    if RI > 1.75:
-                        jovalasz +=1
-                        for st2 in range (60):
-                            view.drawCenterText(feedback)
-                    else:
-                        for st2 in range (60):
-                            view.drawCenterText(feedback)
-                elif v[-1] == 'escape':
-                    print 'Session terminated by user.'
-                    core.quit()
-                a = 1
+        view.drawFixation()
+
+        while True:  #equal 1 in case of answer
+            controller.checkQuit()
+            controller.drawIntensity()
+            view.drawFixation()
+            if controller.isGesture():
+                RI = RT.getTime()
+                break
+
+        controller.checkQuit()
+
+        print str(RI)
+        feedback = str(round(RI, 2)) + ' mp'
+
+        signal.triggerPeak(pinNumber)
+        if RI > 1.75:
+            jovalasz +=1
+            for st2 in range (60):
+                view.drawCenterText(feedback)
+        else:
+            for st2 in range (60):
+                view.drawCenterText(feedback)
+
     print 'jovalasz: ',jovalasz
     gyakblokk +=1
     print gyak_trialszam*gyakblokk
     jovalasz = float(jovalasz)
     ACC = float(jovalasz/(gyak_trialszam*gyakblokk)*100)
     if ACC>=80: #15
-        z=1
+        break
 
 view.continueScreen(u'Vége a gyakorlásnak', u'Ha készen áll, nyomja meg a SPACE gombot')
 
@@ -110,12 +107,17 @@ ujszam = -1
 for i in range (trialszam):
     view.drawFixation()
     core.wait(1.5)
+
     while True:  #equal 1 in case of answer
+        controller.checkQuit()
         controller.drawIntensity()
         view.drawFixation()
         if controller.isGesture():
             signal.triggerPeak(pinNumber)
             break
+
+    controller.checkQuit()
+
     if (i+1) == 15 or (i+1) == 36 or (i+1) == 57 or (i+1) == 78:
         szam = random.choice(lista)
         print 'szam: ', szam
@@ -124,8 +126,6 @@ for i in range (trialszam):
     if (i+1) == ujszam:
         random.shuffle(positions)
         controller.induction(positions)
-
-        view.continueScreen(u'Most pihenhet egy kicsit.', u'Ha készen áll a folytatásra, nyomja meg a SPACE billentyűt.')
 
 view.continueScreen(u'Vége')
 

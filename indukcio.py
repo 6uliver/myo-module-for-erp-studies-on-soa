@@ -55,6 +55,7 @@ random.shuffle(positions_ALL)
 
 view.continueScreen(u'Üdvözlő képernyő')
 
+# TODO session-ször kellene lefuttatni?
 controller.induction(positions_ALL, trialszam)
 
 #CSÚSZKA

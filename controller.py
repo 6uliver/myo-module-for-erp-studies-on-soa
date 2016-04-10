@@ -93,18 +93,21 @@ class Controller():
     def measureThresholds(self, rest=True, active=True):
         if rest:
             self.view.continueScreen(u'Kalibrálás', u'Nyugalmi helyzetben')
-            self.restThreshold = self.measure()
+            self.restThreshold = self.measure(True)
         if active:
             self.view.continueScreen(u'Kalibrálás', u'Felemelt helyzetben')
-            self.activeThreshold = self.measure()
+            self.activeThreshold = self.measure(False)
             
-    def measure(self, count=3):
+    def measure(self, rest, count=3):
         below = []
         above = []
         for j in range (count*2):
-            get = (j % 2) == 0
+            get = (j % 2) == 1
             if get:
-                self.view.drawHandGet()
+                if rest:
+                    self.view.drawFixation()
+                else:
+                    self.view.drawHandGet()
             else:
                 self.view.drawHand()
             while True:
@@ -124,6 +127,12 @@ class Controller():
         print avg(below), avg(above)
         print (avg(below) + avg(above))/2
         return (avg(below) + avg(above))/2
+
+    def checkQuit(self):
+        v = event.getKeys(keyList=['escape'])
+        if v != [] and v[-1] == 'escape':
+            print 'Session terminated by user.'
+            self.quit()
 
     def induction(self, positions, count=8):
         for j in range (count):
@@ -150,10 +159,7 @@ class Controller():
                         self.positionQueue.get(True)
                     break
                     
-                k = event.getKeys(keyList='escape')
-                if k and k[-1] == 'escape':
-                    self.quit()
+                self.checkQuit()
         self.view.resetHandPosition()
-
 
         self.view.continueScreen(u'Most pihenhet egy kicsit.', u'Ha készen áll a folytatásra, nyomja meg a SPACE billentyűt.')
