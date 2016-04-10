@@ -36,6 +36,13 @@ def quaternion_to_euler(q):
 
     return Euler(rx, ry, rz)
 
+def clampAngle(angle):
+    while angle < -math.pi/2:
+        angle += math.pi
+    while angle > math.pi/2:
+        angle -= math.pi
+    return angle
+
 class MyoMouse:
     def __init__(self, scale=[1,1]):
         self.scale = scale
@@ -61,13 +68,14 @@ class MyoMouse:
 
         if self.lastY == None:
             self.lastY = y
-        diff = (y - self.lastY) * self.scale[0]
+        diff = clampAngle(y - self.lastY) * self.scale[0]
         self.y = min(1, max(self.y + diff, 0))
         self.lastY = y
 
         if self.lastX == None:
             self.lastX = x
-        diff = (x - self.lastX) * self.scale[1]
+
+        diff = clampAngle(x-self.lastX) * self.scale[1]
         self.x = min(1, max(self.x + diff, 0))
         self.lastX = x
 

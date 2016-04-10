@@ -144,8 +144,8 @@ class Controller():
                 #print intensity
 
                 position = self.positionQueue.get(True)
-                position[0] *= self.view.getSize()[0]/30
-                position[1] *= self.view.getSize()[1]/20
+                position[0] *= self.view.getSize()[0]/35
+                position[1] *= self.view.getSize()[1]/30
 
                 self.view.setHandPosition(position)
 
