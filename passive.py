@@ -14,7 +14,7 @@ from dataCollector import DataCollector
 from controller import Controller
 
 signal = Signal(0x378)
-signal.disable()
+#signal.disable()
 
 personData = View.collectPersonData(u'PASSZÍV')
 
