@@ -84,8 +84,6 @@ while True:
         print str(waitTime)
         feedback = str(round(waitTime, 2)) + ' mp'
 
-        # TODO kell-e?
-        # signal.triggerPeak(pinNumber)
         test_clock.reset()
         for st in range (stimulus_interval):
             view.drawHand()
@@ -114,7 +112,7 @@ view.continueScreen(u'Vége a gyakorlásnak', u'Ha készen áll, nyomja meg a SP
 #ingerbemutatás x ideig
 
 # megnyomja, trigger és rögtön kéz, néha indukció
-trialszam = 100
+trialszam = 120
 lista = [0, 1, 2, 3, 4, 5, 6]
 ujszam = -1
 for i in range (trialszam):

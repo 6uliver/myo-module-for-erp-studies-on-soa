@@ -54,7 +54,7 @@ st_int = int(round(300/framerate_ms, 0))
 
 view.continueScreen(u'Üdvözlő képernyő')
 
-trialszam = 100
+trialszam = 120
 ISI = [1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400, 2450]
 print len(ISI)
 

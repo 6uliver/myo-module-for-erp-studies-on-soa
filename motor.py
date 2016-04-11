@@ -101,7 +101,7 @@ view.continueScreen(u'Vége a gyakorlásnak', u'Ha készen áll, nyomja meg a SP
 # ugyanaz, mint az aktívnál, csak nincs kéz
 #fixációs kereszt amíg meg nem nyom egy gombot
 #ingerbemutatás x ideig
-trialszam = 100
+trialszam = 120
 lista = [0, 1, 2, 3, 4, 5, 6]
 ujszam = -1
 for i in range (trialszam):

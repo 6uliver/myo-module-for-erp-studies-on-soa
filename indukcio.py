@@ -56,7 +56,8 @@ random.shuffle(positions_ALL)
 view.continueScreen(u'Üdvözlő képernyő')
 
 # TODO session-ször kellene lefuttatni?
-controller.induction(positions_ALL, trialszam)
+for s in range(session):
+    controller.induction(positions_ALL, trialszam)
 
 #CSÚSZKA
 rating_HASONLO, rating_SAJAT = view.getRating()
