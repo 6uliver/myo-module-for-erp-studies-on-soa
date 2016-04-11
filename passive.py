@@ -32,7 +32,7 @@ else:
     pinNumber = 3#choose a pin to write to (2-9).
 
 size = [1366, 768]
-view = View(size)
+view = View(size, True)
 controller = Controller(view)
 
 view.quit = controller.quit

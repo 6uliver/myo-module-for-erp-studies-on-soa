@@ -50,8 +50,8 @@ class View():
         self.hand = visual.ImageStim(self.win, 'images/' + prefix + '_' + hand + '_1.png', pos=(0, 0))
         self.hand_get = visual.ImageStim(self.win, 'images/' + prefix + '_' + hand + '_2.png', pos=(0, 0))
 
-        self.hand.size /= 5.75*1.5
-        self.hand_get.size /= 5.75*1.5
+        self.hand.size /= 5.75
+        self.hand_get.size /= 5.75
 
     def getRating(self):
         self.setHandPosition((0, 2))
@@ -211,5 +211,4 @@ class View():
         expstart4 = gui.Dlg (title = u'ERROR')
         expstart4.addText(text)
         expstart4.show()
-        if expstart4.OK:
-            core.quit()
+        core.quit()

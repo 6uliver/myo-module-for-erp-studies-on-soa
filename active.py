@@ -34,7 +34,7 @@ if not dataCollector.openFile():
 
 size = [1366, 768]
 
-view = View(size)
+view = View(size, True)
 controller = Controller(view)
 
 view.quit = controller.quit
