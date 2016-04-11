@@ -134,7 +134,7 @@ class Controller():
             print 'Session terminated by user.'
             self.quit()
 
-    def induction(self, positions, count=8):
+    def induction(self, positions, count=8, restText=True):
         for j in range (count):
             while True:
                 intensity = self.intensityQueue.get(True)
@@ -162,4 +162,5 @@ class Controller():
                 self.checkQuit()
         self.view.resetHandPosition()
 
-        self.view.continueScreen(u'Most pihenhet egy kicsit.', u'Ha készen áll a folytatásra, nyomja meg a SPACE billentyűt.')
+        if restText:
+            self.view.continueScreen(u'Most pihenhet egy kicsit.', u'Ha készen áll a folytatásra, nyomja meg a SPACE billentyűt.')

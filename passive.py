@@ -95,7 +95,7 @@ for i in range (trialszam):
         view.drawHand()
 
     controller.checkQuit()
-    if (i+1) == 15 or (i+1) == 36 or (i+1) == 57 or (i+1) == 78:
+    if (i+1) == 15 or (i+1) == 36 or (i+1) == 57 or (i+1) == 78 or (i+1) == 99:
         szam = random.choice(lista)
         print 'szam: ', szam
         ujszam = (i+1)+szam
