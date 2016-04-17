@@ -4,15 +4,19 @@ import codecs
 
 class DataCollector():
 
-    def __init__(self, type, sorszam, nem, kez):
+    def __init__(self, type, sorszam, nem, kez, session=None):
         self.type = type
         self.sorszam = sorszam
         self.nem = nem
         self.kez = kez
+        self.session = session
         self.output_file = None
 
     def openFile(self):
-        filename = self.sorszam +'_HandMYO_' + self.type + '_'+ self.nem + '_'+self.kez+'.txt'
+        if self.session is None:
+            filename = self.sorszam +'_HandMYO_' + self.type + '_'+ self.nem + '_'+self.kez+'.txt'
+        else:
+            filename = self.sorszam +'_HandMYO_' + self.type + '_' + self.session + '_' + self.nem + '_'+self.kez+'.txt'
 
         #LOGFILE-OK
         try:

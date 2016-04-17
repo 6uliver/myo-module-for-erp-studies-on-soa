@@ -25,7 +25,7 @@ else:
     pinNumber = 3#choose a pin to write to (2-9).
 
 #LOGFILE-OK
-dataCollector = DataCollector('indukcio', personData['sorszam'],  personData['nem'],  personData['kez'])
+dataCollector = DataCollector('indukcio', personData['sorszam'],  personData['nem'],  personData['kez'], personData['session'])
 
 if not dataCollector.openFile():
     View.showErrorAndQuit(u'Létező beállítások ennél a személynél!\nAz adott sorszámú személynél korábban már elindult ez a blokk. Ha a blokkot újra kell kezdeni ennél a személynél, töröld ki a személy adott blokkjához tartozó .txt fájlt a scriptet tartalmazó mappából.')
