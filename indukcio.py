@@ -11,6 +11,7 @@ from psychopy import parallel, monitors
 from view import View
 from dataCollector import DataCollector
 from controller import Controller
+from config import Config
 
 personData = View.collectPersonData(u'INDUKCIÓ', True)
 
@@ -32,7 +33,7 @@ if not dataCollector.openFile():
 
 size = [1366, 768]
 
-view = View(size, True)
+view = View(size, Config.fullscreen)
 controller = Controller(view)
 
 view.quit = controller.quit

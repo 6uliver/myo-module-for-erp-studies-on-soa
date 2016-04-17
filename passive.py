@@ -12,9 +12,12 @@ from view import View
 from eegsignal import Signal
 from dataCollector import DataCollector
 from controller import Controller
+from config import Config
 
-signal = Signal(0x378)
-#signal.disable()
+signal = Signal(Config.parallelPort)
+
+if Config.parallelDisabled:
+    signal.disable()
 
 personData = View.collectPersonData(u'PASSZÍV')
 
@@ -32,7 +35,7 @@ else:
     pinNumber = 3#choose a pin to write to (2-9).
 
 size = [1366, 768]
-view = View(size, True)
+view = View(size, Config.fullscreen)
 controller = Controller(view)
 
 view.quit = controller.quit
@@ -54,7 +57,7 @@ st_int = int(round(300/framerate_ms, 0))
 
 view.continueScreen(u'Üdvözlő képernyő')
 
-trialszam = 120
+trialszam = Config.trialszam
 ISI = [1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400, 2450]
 print len(ISI)
 

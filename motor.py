@@ -14,9 +14,13 @@ from view import View
 from eegsignal import Signal
 from dataCollector import DataCollector
 from controller import Controller
+from config import Config
 
-signal = Signal(0x378)
-#signal.disable()
+signal = Signal(Config.parallelPort)
+
+if Config.parallelDisabled:
+    signal.disable()
+
 personData = View.collectPersonData(u'MOTOR')
 
 male = (personData['nem'] == u"férfi")
@@ -34,7 +38,7 @@ if not dataCollector.openFile():
 
 size = [1366, 768]
 
-view = View(size, True)
+view = View(size, Config.fullscreen)
 controller = Controller(view)
 
 view.quit = controller.quit
@@ -101,7 +105,7 @@ view.continueScreen(u'Vége a gyakorlásnak', u'Ha készen áll, nyomja meg a SP
 # ugyanaz, mint az aktívnál, csak nincs kéz
 #fixációs kereszt amíg meg nem nyom egy gombot
 #ingerbemutatás x ideig
-trialszam = 120
+trialszam = Config.trialszam
 lista = [0, 1, 2, 3, 4, 5, 6]
 ujszam = -1
 for i in range (trialszam):
