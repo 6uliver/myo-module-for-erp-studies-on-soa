@@ -14,7 +14,7 @@ class View():
                                          pos=(0.0, 0.0), color='silver', opacity=0.6, height=0.8, units='cm')
         self.fixation = visual.TextStim(self.win, text='+', alignHoriz='center', alignVert='center', pos=(0.0, 0.0),
                                         color='Red', height=3, units='cm')
-        self.stimulus = visual.Rect(self.win, width=3, height=3, units='cm', lineColor='Tomato', fillColor='Tomato',
+        self.stimulus = visual.Rect(self.win, width=6, height=6, units='cm', lineColor='Tomato', fillColor='Tomato',
                                     lineWidth=1.5, pos=[0, 0])
         self.instrukcio = visual.TextStim(self.win, text=u'', alignHoriz='center', alignVert='center', pos=(0.0, 0.2),
                                           color='white', height=0.5, units='cm', wrapWidth=27, font='courier new')
@@ -50,8 +50,8 @@ class View():
         self.hand = visual.ImageStim(self.win, 'images/' + prefix + '_' + hand + '_1.png', pos=(0, 0))
         self.hand_get = visual.ImageStim(self.win, 'images/' + prefix + '_' + hand + '_2.png', pos=(0, 0))
 
-        self.hand.size /= 5.75
-        self.hand_get.size /= 5.75
+        self.hand.size /= 5
+        self.hand_get.size /= 5
 
     def getRating(self):
         self.setHandPosition((0, 2))
