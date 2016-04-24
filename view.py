@@ -3,13 +3,16 @@
 
 from psychopy import visual, core, event, gui
 import collections
+from config import Config
 
 
 class View():
     def __init__(self, size, fullscreen=False):
         self.size = size
-        self.win = visual.Window(size, monitor="testMonitor", color='Black', allowGUI=True, units='cm',
+        self.win = visual.Window(size, monitor="testMonitor", color='Black', allowGUI=False, units='cm',
                                      waitBlanking=True, fullscr=fullscreen)
+        self.win.setMouseVisible(False)
+        self.mouse = event.Mouse(win=self.win, visible=False)
         self.frametest = visual.TextStim(self.win, text=u'Indítás...', alignHoriz='center', alignVert='center',
                                          pos=(0.0, 0.0), color='silver', opacity=0.6, height=0.8, units='cm')
         self.fixation = visual.TextStim(self.win, text='+', alignHoriz='center', alignVert='center', pos=(0.0, 0.0),
@@ -79,8 +82,9 @@ class View():
         self.win.flip()
 
     def drawIntensity(self, intensity):
-        self.intensityText.setText(intensity)
-        self.intensityText.draw()
+        if Config.showMyoIntensity:
+            self.intensityText.setText(intensity)
+            self.intensityText.draw()
 
     def setHandPosition(self, position):
         self.hand.pos = position

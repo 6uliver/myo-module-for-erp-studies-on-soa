@@ -3,3 +3,4 @@ class Config:
     trialszam=120
     parallelPort=0x378
     parallelDisabled=False
+    showMyoIntensity=False
