@@ -52,6 +52,11 @@ class Controller():
         intensity = self.intensityQueue.get(True)
         self.view.drawIntensity(int(intensity))
 
+    def countdown(self):
+        for i in range(3, 0, -1):
+            self.view.drawCountdownText(i)
+            core.wait(1)
+
     def onPosition(self, position):
         if self.positionQueue.empty():
             self.positionQueue.put(position)
@@ -135,6 +140,7 @@ class Controller():
             self.quit()
 
     def induction(self, positions, count=8, restText=True):
+        self.countdown()
         for j in range (count):
             while True:
                 intensity = self.intensityQueue.get(True)
@@ -154,7 +160,7 @@ class Controller():
 
                 if self.view.isHandCanGetStimulus() and catch:
                     core.wait(0.8)
-                    self.mouse.reset()
+                    # self.mouse.reset()
                     while not self.positionQueue.empty():
                         self.positionQueue.get(True)
                     break

@@ -23,6 +23,8 @@ class View():
                                           color='white', height=0.5, units='cm', wrapWidth=27, font='courier new')
         self.centerText = visual.TextStim(self.win, text=u'', alignHoriz='center', alignVert='center', pos=(0.0, 0.0),
                                           color='white', height=1, units='cm', wrapWidth=27, font='courier new')
+        self.countdown = visual.TextStim(self.win, text=u'', alignHoriz='center', alignVert='center', pos=(0.0, 0.0),
+                                          color='white', height=5, units='cm', wrapWidth=27, font='courier new')
         self.intensityText = visual.TextStim(self.win, text=u'', alignHoriz='center', alignVert='center', pos=(-10.0, -10.0),
                                           color='white', height=1, units='cm', wrapWidth=27, font='courier new')
 
@@ -72,6 +74,11 @@ class View():
         rating_SAJAT = self.rateSAJAT_scale.getRating()
 
         return rating_HASONLO, rating_SAJAT
+
+    def drawCountdownText(self, text):
+        self.countdown.setText(text)
+        self.countdown.draw()
+        self.win.flip()
 
     def drawHandGet(self):
         self.hand_get.draw()
