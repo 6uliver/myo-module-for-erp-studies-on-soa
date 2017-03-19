@@ -45,7 +45,7 @@ view.quit = controller.quit
 
 view.setHands(male, right)
 
-controller.measureThresholds()
+controller.loadThresholds()
 
 RT = core.Clock()
 st_ido = core.Clock()

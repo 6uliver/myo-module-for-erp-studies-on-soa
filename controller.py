@@ -5,6 +5,7 @@ from psychopy import core, event
 import math
 from myo import *
 from Queue import Queue
+import json
 
 def avg(list):
     return sum(list) / len(list)
@@ -102,7 +103,21 @@ class Controller():
         if active:
             self.view.continueScreen(u'Kalibrálás', u'Felemelt helyzetben')
             self.activeThreshold = self.measure(False)
-            
+
+    def saveThresholds(self):
+        with open('threshold.json', 'w') as outfile:
+            json.dump({
+                'rest': self.restThreshold,
+                'active': self.activeThreshold
+            }, outfile)
+
+    def loadThresholds(self):
+        with open('threshold.json', 'r') as threshold_file:
+            data = json.load(threshold_file)
+            self.restThreshold = data['rest']
+            self.activeThreshold = data['active']
+        print "Thresholds loaded: " + str(self.restThreshold) + " - " + str(self.activeThreshold)
+
     def measure(self, rest, count=3):
         below = []
         above = []

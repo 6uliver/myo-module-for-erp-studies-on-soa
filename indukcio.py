@@ -40,7 +40,7 @@ view.quit = controller.quit
 
 view.setHands(male, right)
 
-controller.measureThresholds(False, True)
+controller.loadThresholds()
 
 positions = [(-10, 7), (0, 7),(10,7),(10,0),(10,-7),(0,-7),(-10,-7), (-10,0)]
 random.shuffle(positions)

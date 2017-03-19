@@ -42,7 +42,7 @@ view.quit = controller.quit
 
 view.setHands(male, right)
 
-controller.measureThresholds(False, True)
+controller.loadThresholds()
 
 framerate_ms = view.measureFrameRate()
 print framerate_ms
