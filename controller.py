@@ -64,7 +64,6 @@ class Controller():
 
     def printPose(self, pose):
         pass
-        #print pose
 
     def rms(self, list):
         squares = [x**2 for x in list]
@@ -76,7 +75,6 @@ class Controller():
 
     def printEMG(self, emg):
         self.count += 1
-        #print emg
         self.emgHistory.append(emg)
         while len(self.emgHistory) > 20:
             self.emgHistory.pop(0)
@@ -88,11 +86,7 @@ class Controller():
             rmsList.append(self.rms(emgData))
 
         avg = sum(rmsList) / len(rmsList)
-        #print avg
-        #print max(rmsList)
         intensity = avg
-        #intensity = self.rms(rmsList)
-        #intensity = max(rmsList)
         if self.intensityQueue.empty():
             self.intensityQueue.put(intensity)
             
@@ -162,8 +156,6 @@ class Controller():
 
                 catch = intensity > self.activeThreshold
 
-                #print intensity
-
                 position = self.positionQueue.get(True)
                 position[0] *= self.view.getSize()[0]/35
                 position[1] *= self.view.getSize()[1]/30
@@ -175,7 +167,6 @@ class Controller():
 
                 if self.view.isHandCanGetStimulus() and catch:
                     core.wait(0.8)
-                    # self.mouse.reset()
                     while not self.positionQueue.empty():
                         self.positionQueue.get(True)
                     break

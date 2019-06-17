@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #Szalóki Szilvia
-#HAND INDUKCIÓ 
+# Reinforcement of Control
 #======================================================================
 
 from __future__ import division
@@ -20,12 +20,12 @@ right = (personData['kez'] == u"jobb")
 trialszam = personData['trialszam']
 session = personData['session']
 
+# pin number 2 for right hand and port number 3 for left hand
 if right:
-    pinNumber = 2#choose a pin to write to (2-9).
+    pinNumber = 2
 else:
-    pinNumber = 3#choose a pin to write to (2-9).
+    pinNumber = 3
 
-#LOGFILE-OK
 dataCollector = DataCollector('indukcio', personData['sorszam'],  personData['nem'],  personData['kez'], personData['session'])
 
 if not dataCollector.openFile():
@@ -58,9 +58,8 @@ view.continueScreen(u'Üdvözlő képernyő')
 
 controller.induction(positions_ALL, trialszam, False)
 
-#CSÚSZKA
+# sliders for ratings
 rating_HASONLO, rating_SAJAT = view.getRating()
-print 'rating_HASONLO: ', rating_HASONLO, ',rating_SAJAT: ', rating_SAJAT
 dataCollector.write(personData['sorszam'], personData['nem'], personData['kez'], trialszam, session, rating_HASONLO, rating_SAJAT)
 
 view.continueScreen(u'Vége')

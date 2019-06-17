@@ -24,10 +24,11 @@ personData = View.collectPersonData(u'AKTÍV')
 male = (personData['nem'] == u"férfi")
 right = (personData['kez'] == u"jobb")
 
+# pin number 2 for right hand and port number 3 for left hand
 if right:
-    pinNumber = 2#choose a pin to write to (2-9).
+    pinNumber = 2
 else:
-    pinNumber = 3#choose a pin to write to (2-9).
+    pinNumber = 3
 
 dataCollector = DataCollector('aktiv', personData['sorszam'],  personData['nem'],  personData['kez'])
 
@@ -58,8 +59,9 @@ stimulus_interval = int(round(300 / framerate_ms, 0))
 
 view.continueScreen(u'Üdvözlő képernyő')
 
-##GYAKORLÁS - Myo
-## ugyanaz mint a következő, csak kap visszajelzést, mér és csak akkor enged tovább, ha elér egy szintet, nincs indukció
+## Practicing - Myo
+## the same as the next one, just the participant has a feedback.
+## she can continue if she reach a level. there's no reinforcement of control
 ACC = 0
 jovalasz = 0
 gyakblokk =0
@@ -73,7 +75,7 @@ while True:
         view.drawFixation()
 
         v=[]
-        while True:  #equal 1 in case of answer
+        while True:
             controller.checkQuit()
             controller.drawIntensity()
             view.drawFixation()
@@ -105,15 +107,12 @@ while True:
     print osszesValasz
     jovalasz = float(jovalasz)
     ACC = float(jovalasz/(osszesValasz)*100)
-    if ACC>=80: #15
+    if ACC>=80:
         break
 
 view.continueScreen(u'Vége a gyakorlásnak', u'Ha készen áll, nyomja meg a SPACE gombot')
 
-#fixációs kereszt amíg meg nem nyom egy gombot
-#ingerbemutatás x ideig
-
-# megnyomja, trigger és rögtön kéz, néha indukció
+# after the gesture the hand drawn, reinforcement of control comes randomly
 trialszam = Config.trialszam
 lista = [0, 1, 2, 3, 4, 5, 6]
 ujszam = -1
@@ -121,7 +120,7 @@ for i in range (trialszam):
     view.drawFixation()
     core.wait(1.5)
 
-    while True:  #equal 1 in case of answer
+    while True:
         controller.checkQuit()
         controller.drawIntensity()
         view.drawFixation()

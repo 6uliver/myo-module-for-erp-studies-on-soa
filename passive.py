@@ -29,10 +29,11 @@ if not dataCollector.openFile():
 male = (personData['nem'] == u"férfi")
 right = (personData['kez'] == u"jobb")
 
+# pin number 2 for right hand and port number 3 for left hand
 if right:
-    pinNumber = 2#choose a pin to write to (2-9).
+    pinNumber = 2
 else:
-    pinNumber = 3#choose a pin to write to (2-9).
+    pinNumber = 3
 
 size = [1366, 768]
 view = View(size, Config.fullscreen)
@@ -80,7 +81,7 @@ for i in  range (len(allISI)):
 print allISI
 random.shuffle(allISI)
 
-# valamikor trigger és rögtön kéz, néha indukció
+# sometimes a fixation has been shown and the hand drawn, reinforcement of control comes randomly
 event.clearEvents(eventType='keyboard')
 for i in range (trialszam):
     controller.checkQuit()

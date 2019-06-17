@@ -3,7 +3,7 @@ from psychopy import parallel
 class Signal():
 
     def __init__(self, port):
-        parallel.setPortAddress(port) #address for parallel port on many machines
+        parallel.setPortAddress(port) # set address for parallel port
         self.disabled = False
 
     def disable(self):
@@ -14,13 +14,13 @@ class Signal():
             return
 
         for k in range(20):
-            parallel.setPin(pinNumber, 1) #TRIGGER be!
+            parallel.setPin(pinNumber, 1) # trigger on
         for k in range(20):
-            parallel.setData(0) #TRIGGER ki!
+            parallel.setData(0) # trigger off
 
     def reset(self):
         if self.disabled:
             return
 
         for k in range(20):
-            parallel.setData(0) #TRIGGER!
+            parallel.setData(0) # trigger off

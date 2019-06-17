@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#Szalóki Szilvia
-#HAND INDUKCIÓ 
 #======================================================================
 
 from __future__ import division

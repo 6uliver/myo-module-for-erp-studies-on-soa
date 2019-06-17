@@ -113,7 +113,6 @@ class View():
         self.win.flip()
 
     def measureFrameRate(self):
-        # MEASURE FRAMERATE
         frametest = visual.TextStim(self.win, text=u'Indítás...', alignHoriz='center', alignVert='center',
                                     pos=(0.0, 0.0), color='silver', opacity=0.6, height=0.8, units='cm')
 
@@ -124,21 +123,15 @@ class View():
             frametest.draw()
             self.win.flip()
             frrate = fr.getTime()
-            #print frrate
             FRAMES.append(frrate)
 
         for i in range(len(FRAMES)):
             k = float(FRAMES[i])
             k = round(FRAMES[i], 4)
-            #print k
             FRAMES[i] = k
 
-        #print FRAMES
-
         counts = collections.Counter(FRAMES)
-        new_list = sorted(FRAMES, key=counts.get, reverse=True)  # egyes frame-ek gyakoriság szerint sorbarendezve
-
-        #print new_list
+        new_list = sorted(FRAMES, key=counts.get, reverse=True)  # the frames sorted by frequency
 
         framerate_ms = new_list[0] * 1000
         return framerate_ms
@@ -158,7 +151,7 @@ class View():
         self.win.flip()
 
     def isHandCanGetStimulus(self):
-        return self.stimulus.contains(self.hand.pos)#self.hand.overlaps(self.stimulus) or self.hand.contains(self.stimulus.pos)
+        return self.stimulus.contains(self.hand.pos)
 
     def setHandGetPosition(self):
         self.hand_get.pos = self.hand.pos
@@ -206,7 +199,8 @@ class View():
             }
 
             return data
-        #Azok az adatok, amiket a program indításkor bekér:
+
+        # Get data at the beginning of the program
         expstart1=gui.Dlg(title=u'A projekt adatai - ' + type)
         expstart1.addText('')
         expstart1.addField(u'Kísérleti személy sorszáma','')
