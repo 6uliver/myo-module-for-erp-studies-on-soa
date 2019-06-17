@@ -1,0 +1,1 @@
+﻿websocket_client==0.35.0

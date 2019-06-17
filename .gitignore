@@ -1,5 +1,6 @@
 *.pyc
 *.txt
+!requirements.txt
 threshold.json
 release/
 myo.zip
