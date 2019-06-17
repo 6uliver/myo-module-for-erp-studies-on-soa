@@ -34,18 +34,18 @@ In the config.py file you can customise the program's features.
 
 ## Experimental paradigms  
 
-calibration.py
+### calibration.py
 At the start of the experiment a calibration has to be done. The program measures the EMG data at rest and with a gesture. The measured intensities are averaged and saved to the threshold.json file. The other experiments are using this file to decide if the participant is doing a gesture or not.
 
-roc.py
+### roc.py
 It contains the reinforcement of control (RoC) condition. The participant has to grab a red square appearing at random screen locations.
 
-active.py
+### active.py
 It contains the motor-induced (MI) condition. The participant is instructed to perform wrist dorsiflexions in a self-paced manner, aiming at a rhythm of about 2 seconds. The participant is also instructed that the software would not respond to very fast responses (<1500 ms, unbeknownst to the participants) and that each movement will be immediately followed by a briefly presented hand stimulus. The task begins with a practice phase consisting of 15 trials (it is coded in the variable 'gyak_trialszam'). The practice session ends when 80% of the trials are completed successfully (i.e. the participant waits for at least 1.75 s between two movements), otherwise, it is repeated. In this phase, the participant gets feedback about their reaction time.  
 In the test phase, the instruction remains the same, but no feedback is given about the reaction time. When a movement is detected, the program triggers the EEG recorder, after which, the stimulus appears on the screen for 300 ms (coded in the variable 'stimulus_interval'). This phase lasts for 120 trials (coded in the variable ‘trialszam’ in the config.py file). Additional reinforcement of control (RoC) trials are inserted five times pseudo-randomly.  
 
-motor.py
+### motor.py
 It contains the motor-only (MO) condition. The task is identical to the MI condition, but no visual hand stimuli are presentation.  
 
-passive.py
+### passive.py
 It contains the passive viewing (PV) condition. The participant is instructed to maintain fixation while stimulus appears on the screen. The variable 'ISI' stores 20 interstimulus intervals ranging between 1500 ms and 2450 ms. The task consists of 120 trials (coded in the variable ‘trialszam’ in the config.py file). At the beginning of each trial, a fixation cross is displayed for the duration of one of the predefined ISIs. After the delay, the program triggers the EEG recorder, after which, the stimulus appears on the screen for 300 ms (coded in the variable 'stimulus_interval'). Additional RoC trials are inserted five times pseudo-randomly.  
